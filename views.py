@@ -1,14 +1,23 @@
 from django.shortcuts import render
-#from django.conf.urls import url
-#from django.http import HttpResponse
+from django.http import Http404
+# from django.views.generic import View
 from django.views.generic import View
-from Lab5.data import hotels, hotels_dict
 
-class HotelsView(View):
-    def get(self, request):
-        return render(request, 'main_page.html', {'hotels': hotels})
+from lab.example import posts, posts_dict
 
-class HotelView(View):
+
+def main(request):
+    return render(request, 'main.html', {
+        'posts': posts
+    })
+
+class PostView(View):
     def get(self, request, id):
-        hotel = hotels.get(int(id))
-        return render(request, 'hotel.html', {'hotel': hotel})
+        post = posts_dict.get(int(id))
+
+        if post is None:
+            raise Http404
+
+        return render(request, 'post.html', {
+            'post': post
+        })
